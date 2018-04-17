@@ -1,0 +1,53 @@
+1.  Fn composition:
+    Create two tables, arbitrary structure. But each one has a primary key and one of them has a foreign key.
+    Populate the tables with a million records.
+    Make sure there are unique indexes or primary key constraings on both primary keys
+    Look at the following query plans:
+
+    1.  Looking up one record and joining it with the record(s) from the other table.
+    2.  Looking up all records and joining with all records from the other table.
+    3.  Express the relation composition as a composition of functions.
+
+2.  Functional Indexes:
+    Create a table with a primary key integer and some other fields
+    Populate that table with a million rows.
+    explain analyze select * from the_table where pkey % 100000 = 45;
+
+    Create an index on the expression pkey % 100000;
+
+    Try again.
+
+3.  Table Methods
+    Create a note table with a subject, an author, and contents.
+    Create a function which calculates a tsvector based on these three fields.
+    Add some general rows here and experiment with querying them.
+
+    Go back to exercise 2.  Create a function which takes the row in, and returns the pkey % 100000)
+    Take a look with invoking this function as a table method.
+
+4.  Text Processing
+    Create a table which contains an id, and a text field.
+    The text field may contain a line in the format of DD (at the beginning of the line) followed by Year Mon Day of a date.
+    Example:  DD 1976 05 22
+    Create a functoin which looks for such a line, parses the date, and returns it as a date.
+    Add some records, some of which have such a line, some of which do not.
+    Add 1000 rows without such a line to pad for the planner.
+    Select the row with the minimum date.
+    Can you optimize this with an index?
+
+5.  Non-1NF designs
+    Go back to the tables you created for exercise 2.  Create a new table with two fields:
+    1.  An int primary key
+    2.  An array of the table type
+    3.  Populate it such that you have the primary key as the old primary key % 100000 and the
+        the of the field are all the rows with the matching modulus operation
+    4.  Try to query the data.  What performs better?  Where might you get more issues from this?
+ 
+6.  Simple Table Inheritance
+    1.   Take your previous exercises, add a fkey field to your notes table from exercise 3.  Leave it null.
+    2.   Add three child tables, and override the fkey to a new target.  You can reuse an existing exercise table or create new ones.
+    3.   Add records to all child tables.
+    4.   Select from the parent table and add the tableoid system field ot your query.
+
+7.  Reverse Partitioning
+    Design your own reverse partitioning structure and ask questions!
